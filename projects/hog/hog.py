@@ -252,15 +252,16 @@ def announce_highest(who, last_score=0, running_high=0):
     def say(score0, score1):
         if who == 0:
             if score0 - last_score > running_high:
-                running_high = score0 - last_score
-                print('Player 0 has reached a new maximum point gain.', running_high, 'point(s)!')
-            last_score = score0
+                print('Player 0 has reached a new maximum point gain.', score0 - last_score, 'point(s)!')
+                return announce_highest(who, score0, score0 - last_score)
+            else:
+                return announce_highest(who, score0, running_high)
         elif who == 1:
             if score1 - last_score > running_high:
-                running_high = score1 - last_score
-                print('Player 1 has reached a new maximum point gain.', running_high, 'point(s)!')
-            last_score = score1
-        return announce_highest(who, last_score, running_high)
+                print('Player 1 has reached a new maximum point gain.', score1 - last_score, 'point(s)!')
+                return announce_highest(who, score1, score1 - last_score)
+            else:
+                return announce_highest(who, score1, running_high)
     return say
     # END PROBLEM 7
 
@@ -322,6 +323,15 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     """
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
+    max_scoring = -1
+    ret = 0
+    averaged_roll = make_averaged(roll_dice, trials_count)
+    for i in range (1, 11): # i in 1 to 10
+        score = averaged_roll(i, dice)  # ! Be cautious that func<averaged_roll> can be called only once here!
+        if score > max_scoring:
+            max_scoring = score
+            ret = i
+    return ret
     # END PROBLEM 9
 
 
@@ -347,8 +357,10 @@ def average_win_rate(strategy, baseline=always_roll(6)):
 def run_experiments():
     """Run a series of strategy experiments and report results."""
     six_sided_max = max_scoring_num_rolls(six_sided)
-    print('Max scoring num rolls for six-sided dice:', six_sided_max)
+    # print('Max scoring num rolls for six-sided dice:', six_sided_max)
+    print('always_roll(six_sided_max) win rate:', average_win_rate(always_roll(six_sided_max)))
     print('always_roll(6) win rate:', average_win_rate(always_roll(6)))
+    
 
     #print('always_roll(8) win rate:', average_win_rate(always_roll(8)))
     #print('piggypoints_strategy win rate:', average_win_rate(piggypoints_strategy))
@@ -362,7 +374,7 @@ def piggypoints_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 6  # Replace this statement
+    return 0 if piggy_points(opponent_score) >= cutoff else num_rolls # ! python 三目运算符
     # END PROBLEM 10
 
 
@@ -372,7 +384,11 @@ def more_boar_strategy(score, opponent_score, cutoff=8, num_rolls=6):
     Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 6  # Replace this statement
+    piggy_score = piggy_points(opponent_score)
+    if more_boar(score + piggy_score, opponent_score) or piggy_score >= cutoff:
+        return 0
+    else:
+        return num_rolls
     # END PROBLEM 11
 
 
@@ -382,7 +398,7 @@ def final_strategy(score, opponent_score):
     *** YOUR DESCRIPTION HERE ***
     """
     # BEGIN PROBLEM 12
-    return 6  # Replace this statement
+    return more_boar_strategy(score, opponent_score)
     # END PROBLEM 12
 
 ##########################
