@@ -26,6 +26,13 @@ def unique_digits(n):
     2
     """
     "*** YOUR CODE HERE ***"
+    digits = []
+    while n:
+        digit = n % 10
+        if digit not in digits:
+            digits.append(digit)
+        n //= 10
+    return len(digits)
 
 
 def has_digit(n, k):
@@ -36,6 +43,11 @@ def has_digit(n, k):
     False
     """
     "*** YOUR CODE HERE ***"
+    while n:
+        if n % 10 == k:
+            return True
+        n //= 10
+    return False
 
 
 def ordered_digits(x):
@@ -58,7 +70,15 @@ def ordered_digits(x):
 
     """
     "*** YOUR CODE HERE ***"
-
+    last_digit = 11 # ensure a uniform strategy 
+    while x:
+        digit = x % 10
+        if digit > last_digit:
+            return False
+        else:
+            last_digit = digit
+            x //= 10
+    return True
 
 def get_k_run_starter(n, k):
     """
@@ -79,16 +99,25 @@ def get_k_run_starter(n, k):
     >>> get_k_run_starter(1234234534564567, 2)
     2
     """
+    # i = 0
+    # final = None
+    # while ____________________________:
+    #     while ____________________________:
+    #         ____________________________
+    #     final = ____________________________
+    #     i = ____________________________
+    #     n = ____________________________
+    # return final
+
     i = 0
     final = None
-    while ____________________________:
-        while ____________________________:
-            ____________________________
-        final = ____________________________
-        i = ____________________________
-        n = ____________________________
+    while i <= k:
+        while (n >= 10) and (n // 10) % 10 < n % 10 :
+            n = n // 10
+        final = n % 10
+        i += 1
+        n = n // 10
     return final
-
 
 def make_repeater(func, n):
     """Return the function that computes the nth application of func.
@@ -106,7 +135,7 @@ def make_repeater(func, n):
     5
     """
     "*** YOUR CODE HERE ***"
-
+    return identity if n == 0 else lambda x: func(make_repeater(func, n-1)(x))
 
 def composer(func1, func2):
     """Return a function f, such that f(x) = func1(func2(x))."""
@@ -124,7 +153,7 @@ def apply_twice(func):
     16
     """
     "*** YOUR CODE HERE ***"
-
+    return composer(func, func)
 
 def protected_secret(password, secret, num_attempts):
     """
@@ -146,4 +175,14 @@ def protected_secret(password, secret, num_attempts):
     """
     def get_secret(password_attempt):
         "*** YOUR CODE HERE ***"
+        if num_attempts <= 0:
+            print('SECRET LOCKED')
+            return protected_secret(password, secret, num_attempts)
+        else:
+            if password_attempt == password:
+                print(secret)
+                return protected_secret(password, secret, num_attempts)
+            else:
+                print('INCORRECT PASSWORD')
+                return protected_secret(password, secret, num_attempts - 1)
     return get_secret
