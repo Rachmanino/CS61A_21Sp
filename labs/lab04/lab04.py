@@ -1,3 +1,6 @@
+from sqlalchemy import column
+
+
 HW_SOURCE_FILE = __file__
 
 
@@ -20,6 +23,7 @@ def summation(n, term):
     """
     assert n >= 1
     "*** YOUR CODE HERE ***"
+    return term(n) if n == 1 else term(n) + summation(n - 1, term)
 
 
 def pascal(row, column):
@@ -35,6 +39,12 @@ def pascal(row, column):
     6
     """
     "*** YOUR CODE HERE ***"
+    if column == 0 or column == row:
+        return 1
+    elif column > row:
+        return 0
+    else:
+        return pascal(row-1, column-1) + pascal(row-1, column)
 
 
 def paths(m, n):
@@ -51,6 +61,7 @@ def paths(m, n):
     1
     """
     "*** YOUR CODE HERE ***"
+    return 1 if m == 1 or n == 1 else paths(m-1, n) + paths(m, n-1)
 
 
 def couple(s, t):
@@ -67,6 +78,7 @@ def couple(s, t):
     """
     assert len(s) == len(t)
     "*** YOUR CODE HERE ***"
+    return [[s[i], t[i]] for i in range(len(s))]
 
 
 def coords(fn, seq, lower, upper):
@@ -77,7 +89,7 @@ def coords(fn, seq, lower, upper):
     [[-2, 4], [1, 1], [3, 9]]
     """
     "*** YOUR CODE HERE ***"
-    return ______
+    return [[x, fn(x)] for x in seq if fn(x) >= lower and fn(x) <= upper]
 
 
 def riffle(deck):
@@ -90,4 +102,4 @@ def riffle(deck):
     [0, 10, 1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19]
     """
     "*** YOUR CODE HERE ***"
-    return _______
+    return [deck[i // 2] if i % 2 == 0 else deck[len(deck) // 2 + i // 2] for i in range(len(deck))]    # 即使len(deck)是偶数，也要用//，否则会出现浮点数
