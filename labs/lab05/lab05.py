@@ -176,6 +176,16 @@ def berry_finder(t):
     True
     """
     "*** YOUR CODE HERE ***"
+    has_berry = False
+    def search(tree):
+        if label(tree) == 'berry':
+            nonlocal has_berry
+            has_berry = True
+        else:
+            for branch in branches(tree):
+                search(branch)
+    search(t)
+    return has_berry
 
 
 def sprout_leaves(t, leaves):
@@ -212,7 +222,10 @@ def sprout_leaves(t, leaves):
           2
     """
     "*** YOUR CODE HERE ***"
-
+    if is_leaf(t):
+        return tree(label(t), [tree(leaf) for leaf in leaves])  # interesting!
+    return tree(label(t), [sprout_leaves(s, leaves) for s in branches(t)])
+    
 # Abstraction tests for sprout_leaves and berry_finder
 
 
