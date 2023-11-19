@@ -65,7 +65,16 @@ def pingpong(n):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    def dir(n): # next step direction
+        if n == 1:
+            return 1
+        elif n % 8 == 0 or num_eights(n) > 0:
+            return -dir(n-1)
+        else:
+            return dir(n-1)
+    if n == 1:
+        return 1
+    return pingpong(n-1) + dir(n-1)
 
 def missing_digits(n):
     """Given a number a that is in sorted, non-decreasing order,
@@ -95,6 +104,9 @@ def missing_digits(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    if n < 10:
+        return 0
+    return max(n % 10 - (n // 10) % 10 - 1, 0) + missing_digits(n // 10)
 
 
 def ascending_coin(coin):
@@ -151,6 +163,14 @@ def count_coins(change):
     True
     """
     "*** YOUR CODE HERE ***"
+    def count_partitions(n, m): # m is the max coin value used in the partition of n
+        if n == 0:
+            return 1
+        elif n < 0 or m == None:
+            return 0
+        else:
+            return count_partitions(n - m, m) + count_partitions(n, descending_coin(m))
+    return count_partitions(change, 25)
 
 
 def print_move(origin, destination):
@@ -187,6 +207,13 @@ def move_stack(n, start, end):
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
+    mid = 6 - start - end
+    if n == 1:
+        print_move(start, end)
+    else:
+        move_stack(n-1, start, mid)
+        print_move(start, end)
+        move_stack(n-1, mid, end)
 
 
 from operator import sub, mul
@@ -203,4 +230,5 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return lambda n: (lambda f, n: f(f, n))(lambda f, n: 1 if n == 1 else mul(n, f(f, sub(n, 1))), n)
+
