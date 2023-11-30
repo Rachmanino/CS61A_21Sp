@@ -27,8 +27,17 @@ def insert_items(lst, entry, elem):
     ...       ['List', 'ListComp', 'Slice'])
     True
     """
-    "*** YOUR CODE HERE ***"
-
+    "*** YOUR CODE HERE **"
+    last_insert = 0
+    i = 0
+    while i < len(lst): #! Should not use 'for' here since it only evaluates the value of len(lst) once.
+        if lst[i] == entry and not last_insert:
+            lst.insert(i+1, elem)
+            last_insert = 1
+        else:
+            last_insert = 0
+        i += 1
+    return lst
 
 def count_occurrences(t, n, x):
     """Return the number of times that x appears in the first n elements of iterator t.
@@ -36,7 +45,7 @@ def count_occurrences(t, n, x):
     >>> s = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])
     >>> count_occurrences(s, 10, 9)
     3
-    >>> s2 = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7])
+    >>> s2 = iter([10, 9, 10, 9, 9, 10, 8, 8, 8, 7]) 
     >>> count_occurrences(s2, 3, 10)
     2
     >>> s = iter([3, 2, 2, 2, 1, 2, 1, 4, 4, 5, 5, 5])
@@ -51,6 +60,11 @@ def count_occurrences(t, n, x):
     2
     """
     "*** YOUR CODE HERE ***"
+    cnt = 0
+    for i in range(n):
+        if next(t) == x:
+            cnt += 1
+    return cnt
 
 
 def repeated(t, k):
@@ -76,3 +90,13 @@ def repeated(t, k):
     """
     assert k > 1
     "*** YOUR CODE HERE ***"
+    cnt = 0
+    last = None
+    while cnt < k:
+        curr = next(t)
+        if curr == last:
+            cnt += 1
+        else:
+            cnt = 1
+        last = curr
+    return curr
