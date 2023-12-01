@@ -184,10 +184,10 @@ def deep_map_mut(fn, link):
     # print(link, type(link))
     if link == Link.empty:
         return
-    if isinstance(link, int):
-        link = fn(link)
-        return
-    deep_map_mut(fn, link.first)
+    if isinstance(link.first, int):
+        link.first = fn(link.first)
+    else:
+        deep_map_mut(fn, link.first)
     deep_map_mut(fn, link.rest)    
 
 def two_list(vals, amounts):
