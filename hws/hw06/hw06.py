@@ -252,7 +252,7 @@ class VirFib():
         
     def __repr__(self):
         return "VirFib object, value " + str(self.value)
-
+    
 
 def is_bst(t):
     """Returns True if the Tree t has the structure of a valid BST.
